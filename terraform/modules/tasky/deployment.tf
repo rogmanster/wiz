@@ -27,7 +27,7 @@ resource "kubernetes_deployment" "tasky" {
 
         container {
           name  = "tasky"
-          image = "ghcr.io/rogmanster/tasky:wizexercise"
+          image = "ghcr.io/rogmanster/wiz-tasky:latest"
 
           port {
             container_port = 8080
