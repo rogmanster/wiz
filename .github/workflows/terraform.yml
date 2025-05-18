@@ -1,3 +1,12 @@
+iname: Terraform
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - terraform/**
+      - .github/workflows/terraform.yml
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -8,7 +17,7 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: us-west-2 # or your region
+      AWS_DEFAULT_REGION: us-west-2
 
     steps:
       - name: Checkout repository
