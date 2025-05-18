@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
 #resource "aws_key_pair" "mongo_key" {
 #  key_name   = "mongo-key"
 #  public_key = file("~/.ssh/roger-aidemo.pub")

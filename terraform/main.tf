@@ -15,6 +15,26 @@ terraform {
   }
 }
 
+provider "aws" {
+  region = "us-west-2"
+}
+
+data "aws_eks_cluster" "this" {
+  name       = module.eks.cluster_name
+  depends_on = [module.eks]
+}
+
+data "aws_eks_cluster_auth" "this" {
+  name       = module.eks.cluster_name
+  depends_on = [module.eks]
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.this.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.this.token
+}
+
 module "vpc" {
   source                  = "./modules/vpc"
   name                    = "wiz"
@@ -30,7 +50,6 @@ module "vpc" {
 
 module "mongo" {
   source    = "./modules/db"
-  region    = "us-west-2"
   vpc_id    = module.vpc.vpc_id
   subnet_id = module.vpc.public_subnet_ids[0]
 }
@@ -48,7 +67,6 @@ module "eks" {
 
 module "s3" {
   source = "./modules/s3"
-  region = "us-west-2"
 }
 
 module "tasky" {
@@ -56,9 +74,11 @@ module "tasky" {
   bucket_name       = module.s3.bucket_name
   mongodb_backup_sa = module.eks.mongodb_backup_service_account_name
   mongodb_ip        = module.mongo.mongodb_ip
-  cluster_endpoint  = module.eks.cluster_endpoint
-  cluster_ca_data   = module.eks.cluster_certificate_authority_data
-  cluster_name      = module.eks.cluster_name
+  
+  providers = {
+    kubernetes = kubernetes
+  }
+
 }
 
 output "update_kubeconfig" {

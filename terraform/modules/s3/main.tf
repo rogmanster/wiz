@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
 resource "aws_s3_bucket" "db_backups" {
   bucket        = "rogman-tasky-backups"
   force_destroy = true

@@ -1,3 +1,5 @@
+# Role Assumption for S3 to be assumed by Service Account
+# use for cronjob for mongodb backup to S3
 data "aws_iam_policy_document" "s3_backup_assume_role" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
