@@ -27,22 +27,22 @@ module "eks" {
       most_recent = true
     }
   }
-  
+
   eks_managed_node_groups = {
     default = {
-      min_size     = var.min_size 
+      min_size     = var.min_size
       max_size     = var.max_size
       desired_size = var.desired_size
 
-      instance_types = [ var.instance_type ]
+      instance_types = [var.instance_type]
       capacity_type  = "ON_DEMAND"
 
       # Needed by the aws-ebs-csi-driver
       iam_role_additional_policies = {
         AmazonEBSCSIDriverPolicy = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
       }
-    
-      launch_template_tags = { 
+
+      launch_template_tags = {
         Environment = "prod",
         Name        = "${var.name}-eks-instance"
       }
@@ -62,7 +62,7 @@ provider "kubernetes" {
     api_version = "client.authentication.k8s.io/v1"
     command     = "aws"
     # This requires the awscli to be installed locally where Terraform is executed
-    args = ["eks", "get-token", "--cluster-name", module.eks.cluster_name ]
+    args = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
   }
 }
 
@@ -73,13 +73,13 @@ resource "kubernetes_storage_class" "gp3" {
       "storageclass.kubernetes.io/is-default-class" = true
     }
   }
-  storage_provisioner = "ebs.csi.aws.com"
+  storage_provisioner    = "ebs.csi.aws.com"
   allow_volume_expansion = true
-  volume_binding_mode = "WaitForFirstConsumer"
+  volume_binding_mode    = "WaitForFirstConsumer"
   parameters = {
-    type = "gp3"
+    type      = "gp3"
     encrypted = false
-    fsType = "ext4"
+    fsType    = "ext4"
   }
 }
 

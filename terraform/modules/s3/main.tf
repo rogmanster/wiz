@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "db_backups" {
-  bucket = "rogman-tasky-backups"
+  bucket        = "rogman-tasky-backups"
   force_destroy = true
 }
 
@@ -28,7 +28,7 @@ resource "aws_s3_bucket_policy" "public_policy" {
         Sid       = "AllowPublicReadAndList"
         Effect    = "Allow"
         Principal = "*"
-        Action    = [
+        Action = [
           "s3:GetObject",
           "s3:ListBucket"
         ]

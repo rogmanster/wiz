@@ -10,18 +10,18 @@ variable "private_subnet_ids" {
 }
 
 variable "min_size" {
-  default     = 1
-  type        = number
+  default = 1
+  type    = number
 }
 
 variable "max_size" {
-  default     = 2
-  type        = number
+  default = 2
+  type    = number
 }
 
 variable "desired_size" {
-  default     = 1
-  type        = number
+  default = 1
+  type    = number
 }
 
 
