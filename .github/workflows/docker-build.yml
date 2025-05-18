@@ -37,6 +37,6 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            ghcr.io/rogmanster/wiz:latest
+            ghcr.io/rogmanster/wiz-tasky:latest
             ghcr.io/rogmanster/wiz:${{ github.sha }}
 
