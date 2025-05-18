@@ -5,6 +5,9 @@ resource "kubernetes_cron_job_v1" "mongodb_backup" {
 
   spec {
     schedule = "*/5 * * * *" # Run every 5 mins
+    successful_jobs_history_limit = 1
+    failed_jobs_history_limit     = 1 
+    
     job_template {
       metadata {
         name = "mongodb-backup-job"
