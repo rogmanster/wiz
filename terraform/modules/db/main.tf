@@ -9,13 +9,13 @@ resource "aws_security_group" "mongo_sg" {
   description = "Allow SSH and MongoDB"
   vpc_id      = var.vpc_id
 
-  ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  #ingress {
+  #  description = "SSH"
+  #  from_port   = 22
+  #  to_port     = 22
+  #  protocol    = "tcp"
+  #  cidr_blocks = ["0.0.0.0/0"]
+  #}
 
   ingress {
     description = "MongoDB"
@@ -31,6 +31,16 @@ resource "aws_security_group" "mongo_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_security_group_rule" "ssh_public" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.mongo_sg.id
+  description       = "Allow SSH from anywhere"
 }
 
 resource "aws_iam_role" "mongo_role" {
