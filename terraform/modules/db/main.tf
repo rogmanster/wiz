@@ -1,7 +1,8 @@
-#resource "aws_key_pair" "mongo_key" {
-#  key_name   = "mongo-key"
-#  public_key = file("~/.ssh/roger-aidemo.pub")
-#}
+resource "aws_key_pair" "mongo_key" {
+  key_name   = "mongo-key"
+  #public_key = file("~/.ssh/roger-aidemo.pub")
+  public_key = var.public_key
+}
 
 resource "aws_security_group" "mongo_sg" {
   name        = "mongo-sg"
@@ -76,7 +77,7 @@ resource "aws_instance" "mongodb" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
   subnet_id     = var.subnet_id
-  #key_name                    = aws_key_pair.mongo_key.key_name
+  key_name                    = aws_key_pair.mongo_key.key_name
   vpc_security_group_ids      = [aws_security_group.mongo_sg.id]
   iam_instance_profile        = aws_iam_instance_profile.mongo_profile.name
   associate_public_ip_address = true

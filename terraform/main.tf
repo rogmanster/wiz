@@ -49,9 +49,10 @@ module "vpc" {
 }
 
 module "mongo" {
-  source    = "./modules/db"
-  vpc_id    = module.vpc.vpc_id
-  subnet_id = module.vpc.public_subnet_ids[0]
+  source     = "./modules/db"
+  vpc_id     = module.vpc.vpc_id
+  subnet_id  = module.vpc.public_subnet_ids[0]
+  public_key = var.public_key
 }
 
 module "eks" {
