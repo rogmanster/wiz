@@ -21,6 +21,12 @@ provider "aws" {
 
 variable "public_key" {}
 
+variable "enable_attack_simulation" {
+  description = "Whether to deploy the GuardDuty attack"
+  type        = bool
+  default     = true
+}
+
 data "aws_eks_cluster" "this" {
   name       = module.eks.cluster_name
   depends_on = [module.eks]
@@ -81,7 +87,15 @@ module "tasky" {
   providers = {
     kubernetes = kubernetes
   }
+}
 
+module "attack_simulator" {
+  count      = var.enable_attack_simulation ? 1 : 0
+  source     = "./modules/attack"
+  vpc_id     = module.vpc.vpc_id
+  subnet_id  = module.vpc.public_subnet_ids[0] # attacker in separate VPC
+  public_key = var.public_key
+  mongodb_ip = module.mongo.mongodb_ip
 }
 
 output "update_kubeconfig" {
@@ -92,7 +106,21 @@ output "mongodb_ip" {
   value = module.mongo.mongodb_ip
 }
 
+output "mongodb_connection_string" {
+  description = "MongoDB URI for connecting to the database"
+  value       = module.mongo.mongodb_connection_string
+}
+
 output "bucket_name" {
   value = module.s3.bucket_name
 }
+
+output "attacker_instance_id" {
+  value = try(module.attack_simulator[0].attacker_instance_id, null)
+}
+
+output "attacker_ip" {
+  value = try(module.attack_simulator[0].attacker_ip, null)
+}
+
 
