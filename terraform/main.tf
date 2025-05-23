@@ -24,7 +24,7 @@ variable "public_key" {}
 variable "enable_attack_simulation" {
   description = "Whether to deploy the GuardDuty attack"
   type        = bool
-  default     = false
+  default     = true
 }
 
 data "aws_eks_cluster" "this" {
